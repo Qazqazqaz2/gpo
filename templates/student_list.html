@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.teacher_dashboard') }}">Панель преподавателя</a></li>
+                    <li class="breadcrumb-item active">Группа {{ group.name }}</li>
+                </ol>
+            </nav>
+            
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Студенты группы {{ group.name }}</h5>
+                    <a href="{{ url_for('main.teacher_dashboard') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-arrow-left"></i> Назад к группам
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if students %}
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>ФИО</th>
+                                    <th>Заявки</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in students %}
+                                <tr>
+                                    <td>{{ student.id }}</td>
+                                    <td>{{ student.surname }} {{ student.name }} {{ student.patronymic }}</td>
+                                    <td>
+                                        {% set forms_count = student.student_ask_forms|length %}
+                                        {% if forms_count > 0 %}
+                                            <span class="badge bg-primary">{{ forms_count }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">0</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% for form in student.student_ask_forms %}
+                                        <a href="{{ url_for('main.view_form', form_id=form.id) }}" class="btn btn-sm btn-outline-primary mb-1">
+                                            <i class="bi bi-eye"></i> Форма №{{ form.id }}
+                                            
+                                            {% if form.status_navigation.name == '0' %}
+                                            <span class="badge bg-danger">Отклонено</span>
+                                            {% elif form.status_navigation.name == '1' %}
+                                            <span class="badge bg-warning">На рассмотрении</span>
+                                            {% elif form.status_navigation.name == '2' %}
+                                            <span class="badge bg-success">Принято</span>
+                                            {% elif form.status_navigation.name == '3' %}
+                                            <span class="badge bg-info">Завершено</span>
+                                            {% endif %}
+                                        </a>
+                                        {% else %}
+                                        <span class="text-muted">Нет заявок</span>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> В этой группе пока нет студентов.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

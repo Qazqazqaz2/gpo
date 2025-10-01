@@ -1,0 +1,35 @@
+# Flask and extensions
+Flask==2.2.5
+Flask-SQLAlchemy==3.0.5
+Flask-Migrate==4.0.4
+Flask-Login==0.6.2
+Flask-WTF==1.1.1
+Flask-Caching==2.0.2
+
+# Database
+SQLAlchemy==2.0.19
+psycopg2-binary==2.9.6
+
+# DDoS Protection
+redis==4.5.5
+ipaddress==1.0.23
+geoip2==4.7.0
+user-agents==2.2.0
+
+# Production server
+gunicorn==21.2.0
+uwsgi==2.0.21
+waitress==2.1.2
+paste==3.5.0
+
+# Utilities
+python-dotenv==1.0.0
+Werkzeug==2.2.3
+colorama==0.4.6
+matplotlib==3.7.1
+numpy==1.24.3
+tqdm==4.65.0
+
+# Cluster support
+requests==2.31.0
+uuid==1.30 

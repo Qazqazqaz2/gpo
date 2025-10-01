@@ -1,0 +1,126 @@
+<head>
+    <title>Вход на сайт | Заявление на практику</title>
+    <link rel="shortcut icon" href="https://sdo.tusur.ru/theme/image.php/sdo/theme/1744782980/favicon" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="moodle, Вход на сайт | Система\Заявление на практику" />
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/theme/yui_combo.php?rollup/3.17.2/yui-moodlesimple-min.css" />
+    <script id="firstthemesheet" type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script>
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/theme/styles.php/sdo/1744782980_1727922378/all" />
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/filter/syntaxhighlighter/styles/atom-one-light.min.css" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo-container {
+            padding: 10px 20px;
+            text-align: left;
+        }
+        .logo-container img {
+            height: 40px;
+        }
+        .nav-bar {
+            background-color: #0056b3;
+            padding: 8px 20px;
+        }
+        .breadcrumb {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+        }
+        .breadcrumb-item a {
+            color: white !important;
+        }
+        .page-content {
+            margin-top: 100px;
+            display: flex;
+            justify-content: center;
+        }
+        .login-container {
+            width: 400px; /* Фиксированная ширина */
+            min-width: 400px; /* Минимальная ширина */
+            max-width: 400px; /* Максимальная ширина */
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .login-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            background-color: #0056b3;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-header">
+        <div class="logo-container">
+            <img src="https://sdo.tusur.ru/theme/image.php/sdo/theme_sdo/1744782980/logotype_small" alt="ТУСУР">
+        </div>
+        <div class="nav-bar">
+            <div class="breadcrumb-nav">
+                <nav aria-label="Панель навигации">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="#">Вход на сайт</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="login-container">
+            <h1 class="login-title">Вход в систему</h1>
+
+            <form method="POST" action="{{ url_for('auth.login') }}">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+
+                <button type="submit" class="btn-primary">Войти</button>
+            </form>
+
+            <div class="register-link">
+                <p>Нет аккаунта? <a href="{{ url_for('auth.register') }}">Зарегистрироваться</a></p>
+            </div>
+        </div>
+    </div>
+</body>

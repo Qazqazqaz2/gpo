@@ -1,0 +1,129 @@
+Структура базы данных GPO (Sistema de Gestión de Prácticas)
+1. Пользователь (User)
+ID (PK): Integer, primary_key=True
+username: String
+password_hash: String
+role: Integer, ForeignKey('Роль.ID')
+Связи:
+role_navigation: relationship("Role", back_populates="users")
+resposeble_ask_forms: relationship("AskForm", foreign_keys="AskForm.ask_form_resposeble")
+consultant_leader_ask_forms: relationship("AskForm", foreign_keys="AskForm.consultant_leader")
+practice_leader_ask_forms: relationship("AskForm", foreign_keys="AskForm.practice_leader")
+2. Роль (Role)
+ID (PK): Integer, primary_key=True
+name: String (преподаватель, студент)
+Связи:
+users: relationship("User", back_populates="role_navigation")
+3. Студент (Student)
+ID (PK): Integer, primary_key=True
+name: String
+surname: String
+patronymic: String
+group_id: Integer, ForeignKey('Группы.ID')
+Связи:
+group_navigation: relationship("Group")
+student_ask_forms: relationship("AskForm", foreign_keys="AskForm.student")
+4. Группы (Group)
+ID (PK): Integer, primary_key=True
+name: String
+direction: Integer, ForeignKey('Направления.ID')
+Связи:
+direction_navigation: relationship("Direction", back_populates="groups")
+ask_forms: relationship("AskForm", back_populates="group_navigation")
+5. Направления (Direction)
+ID (PK): Integer, primary_key=True
+name: String
+cafedral: Integer, ForeignKey('Кафедра.ID')
+Связи:
+cafedral_navigation: relationship("Cafedral", back_populates="directions")
+groups: relationship("Group", back_populates="direction_navigation")
+practic_times: relationship("PracticTime", back_populates="direction_navigation")
+6. Кафедра (Cafedral)
+ID (PK): Integer, primary_key=True
+name: String
+Связи:
+directions: relationship("Direction", back_populates="cafedral_navigation")
+7. Вид и тип практики (PracticeType)
+ID (PK): Integer, primary_key=True
+name: String
+Связи:
+ask_forms: relationship("AskForm", back_populates="practice_type_navigation")
+8. Организация (Organization)
+ID (PK): Integer, primary_key=True
+name: String
+address: String
+Связи:
+contracts: relationship("Contract", back_populates="organization_navigation")
+9. Договор (Contract)
+ID (PK): Integer, primary_key=True
+contract_number: String
+organization: Integer, ForeignKey('Организация.ID')
+date_start: DateTime
+date_end: DateTime
+Связи:
+organization_navigation: relationship("Organization", back_populates="contracts")
+ask_forms: relationship("AskForm", back_populates="contract_navigation")
+10. Статус (Status)
+ID (PK): Integer, primary_key=True
+name: String (0, 1, 2, 3)
+Связи:
+ask_forms: relationship("Status", back_populates="ask_forms")
+11. Даты практики (PracticTime)
+ID (PK): Integer, primary_key=True
+date_start: DateTime, column_name='Дата начала'
+date_end: DateTime, column_name='Дата окончания'
+direction: Integer, ForeignKey('Направления.ID')
+Связи:
+direction_navigation: relationship("Direction", back_populates="practic_times")
+12. Анкета (AskForm)
+ID (PK): Integer, primary_key=True
+practice_type: Integer, ForeignKey('Вид и тип практики.ID'), nullable=False, column_name='Вид и тип практики'
+group: Integer, ForeignKey('Группы.ID'), nullable=False, column_name='Группа'
+contract: Integer, ForeignKey('Договор.ID'), nullable=False, column_name='Договор'
+ask_form_resposeble: Integer, ForeignKey('Пользователь.ID'), nullable=False, column_name='Ответственные за заполнение'
+consultant_leader: Integer, ForeignKey('Пользователь.ID'), nullable=False, column_name='Руководитель консультант'
+practice_leader: Integer, ForeignKey('Пользователь.ID'), nullable=False, column_name='Руководитель практики'
+status: Integer, ForeignKey('Статус.ID'), nullable=False, column_name='Статус'
+student: Integer, ForeignKey('Студент.ID'), nullable=False, column_name='Студент'
+Связи:
+practice_type_navigation: relationship("PracticeType", back_populates="ask_forms")
+group_navigation: relationship("Group", back_populates="ask_forms")
+contract_navigation: relationship("Contract", back_populates="ask_forms")
+ask_form_resposeble_navigation: relationship("User", foreign_keys=[ask_form_resposeble])
+consultant_leader_navigation: relationship("User", foreign_keys=[consultant_leader])
+practice_leader_navigation: relationship("User", foreign_keys=[practice_leader])
+status_navigation: relationship("Status", back_populates="ask_forms")
+student_navigation: relationship("Student", foreign_keys=[student])
+13. Fields
+ID (PK): Integer, primary_key=True, column_name='ID'
+name: String, unique=True
+type: String(35)
+block: String
+page: String
+text: Text
+mutability: String
+14. Templates
+ID (PK): Integer, primary_key=True, column_name='ID'
+template_body: Text
+Типы связей и особенности
+One-to-Many (Один ко многим):
+Role → User: Одна роль может быть у множества пользователей
+Group → Student: В одной группе много студентов
+Direction → Group: Одно направление включает много групп
+Cafedral → Direction: Одна кафедра охватывает множество направлений
+Organization → Contract: Одна организация может иметь несколько договоров
+Direction → PracticTime: Для направления может быть несколько периодов практики
+Status → AskForm: Один статус может быть у многих заявок
+PracticeType → AskForm: Один тип практики может использоваться в нескольких заявках
+Many-to-One (Многие к одному):
+Student → Group: Много студентов принадлежат к одной группе
+AskForm → Student: Несколько заявок могут относиться к одному студенту
+AskForm → Contract: Несколько заявок могут относиться к одному договору
+AskForm → User: Несколько заявок могут иметь одного ответственного пользователя
+Contract → Organization: Несколько договоров могут относиться к одной организации
+Специфические особенности:
+Для таблицы User сделана множественная связь с AskForm, где пользователь может выступать в разных ролях (ответственный, консультант, руководитель), что реализовано через foreign_keys
+На уровне базы данных используются constraints nullable=False для обязательных полей в AskForm
+Для паролей используется хеширование через функции generate_password_hash и check_password_hash
+User наследуется от UserMixin для интеграции с Flask-Login
+Property roles возвращает список ролей пользователя (в данном случае одну)

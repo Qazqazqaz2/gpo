@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.student_dashboard') }}">Мои заявки</a></li>
+                    <li class="breadcrumb-item active">Новая заявка</li>
+                </ol>
+            </nav>
+            
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Заполнение заявки на практику</h5>
+                    <a href="{{ url_for('main.student_dashboard') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-arrow-left"></i> Назад к списку
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle"></i> Заполните все поля формы для подачи заявки на практику.
+                    </div>
+                    
+                    <form action="{{ url_for('main.practice_form') }}" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="practice_type" class="form-label">Вид и тип практики</label>
+                                <select name="practice_type" id="practice_type" class="form-select" required>
+                                    <option value="">Выберите тип практики</option>
+                                    {% for practice_type in practice_types %}
+                                    <option value="{{ practice_type.id }}">{{ practice_type.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="group" class="form-label">Группа</label>
+                                <select name="group" id="group" class="form-select" required>
+                                    {% if current_student and current_student.group_navigation %}
+                                    <option value="{{ current_student.group_navigation.id }}" selected>{{ current_student.group_navigation.name }}</option>
+                                    {% else %}
+                                    <option value="{{ default_group.id }}" selected>{{ default_group.name }}</option>
+                                    {% endif %}
+                                    {% for group in groups %}
+                                    {% if (not current_student or current_student.group_id != group.id) and group.id != default_group.id %}
+                                    <option value="{{ group.id }}">{{ group.name }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="contract" class="form-label">Договор</label>
+                                <select name="contract" id="contract" class="form-select" required>
+                                    <option value="">Выберите договор</option>
+                                    {% for contract in contracts %}
+                                    <option value="{{ contract.id }}">{{ contract.contract_number }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="student" class="form-label">Студент</label>
+                                <select name="student" id="student" class="form-select" required>
+                                    {% if current_student %}
+                                    <option value="{{ current_student.id }}" selected>{{ current_student.surname }} {{ current_student.name }} {{ current_student.patronymic }}</option>
+                                    {% else %}
+                                    <option value="">Выберите студента</option>
+                                    {% for student in students %}
+                                    <option value="{{ student.id }}">{{ student.surname }} {{ student.name }} {{ student.patronymic }}</option>
+                                    {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="use_custom_org" name="use_custom_org">
+                                <label class="form-check-label" for="use_custom_org">
+                                    Указать свою организацию (если нет в списке договоров)
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="custom_org_fields" class="row" style="display: none;">
+                            <div class="col-md-4 mb-3">
+                                <label for="custom_org_name" class="form-label">Название организации</label>
+                                <input type="text" class="form-control" id="custom_org_name" name="custom_org_name" placeholder="ООО 'Название организации'">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="custom_org_address" class="form-label">Адрес организации</label>
+                                <input type="text" class="form-control" id="custom_org_address" name="custom_org_address" placeholder="г. Москва, ул. Примерная, д. 123">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="custom_contract_num" class="form-label">Номер договора</label>
+                                <input type="text" class="form-control" id="custom_contract_num" name="custom_contract_num" placeholder="№12345 от 01.01.2025">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="phone_number" class="form-label">Телефон студента</label>
+                                <input type="tel" class="form-control" id="phone_number" name="phone_number" placeholder="+7XXXXXXXXXX" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Email студента</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="example@mail.ru" required>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="consultant_leader" class="form-label">Руководитель консультант</label>
+                                <select name="consultant_leader" id="consultant_leader" class="form-select" required>
+                                    {% for teacher in teachers %}
+                                    <option value="{{ teacher.id }}">{{ teacher.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="practice_leader" class="form-label">Руководитель практики</label>
+                                <select name="practice_leader" id="practice_leader" class="form-select" required>
+                                    {% for teacher in teachers %}
+                                    <option value="{{ teacher.id }}">{{ teacher.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Отправить заявку</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get elements
+    const useCustomOrgCheckbox = document.getElementById('use_custom_org');
+    const customOrgFields = document.getElementById('custom_org_fields');
+    const contractSelect = document.getElementById('contract');
+    const customOrgName = document.getElementById('custom_org_name');
+    const customOrgAddress = document.getElementById('custom_org_address');
+    const customContractNum = document.getElementById('custom_contract_num');
+
+    // Initialize state
+    customOrgFields.style.display = useCustomOrgCheckbox.checked ? 'block' : 'none';
+    
+    // Add change event listener to checkbox
+    useCustomOrgCheckbox.addEventListener('change', function() {
+        console.log('change');
+        if (this.checked) {
+            document.getElementById('custom_org_fields').style.display = 'block';
+            contractSelect.removeAttribute('required');
+            customOrgName.setAttribute('required', '');
+            customOrgAddress.setAttribute('required', '');
+            customContractNum.setAttribute('required', '');
+        } else {
+            // Hide custom org fields, make contract required
+            customOrgFields.style.display = 'none';
+            contractSelect.setAttribute('required', '');
+            customOrgName.removeAttribute('required');
+            customOrgAddress.removeAttribute('required');
+            customContractNum.removeAttribute('required');
+        }
+    });
+});
+</script>
+{% endblock %}

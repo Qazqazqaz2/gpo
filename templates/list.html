@@ -1,0 +1,359 @@
+<head>
+    <title>Управление формами | Заявление на практику</title>
+    <link rel="shortcut icon" href="https://sdo.tusur.ru/theme/image.php/sdo/theme/1744782980/favicon" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="moodle, Управление формами | Система\Заявление на практику" />
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/theme/yui_combo.php?rollup/3.17.2/yui-moodlesimple-min.css" />
+    <script id="firstthemesheet" type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script>
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/theme/styles.php/sdo/1744782980_1727922378/all" />
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/filter/syntaxhighlighter/styles/atom-one-light.min.css" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo-container {
+            padding: 10px 20px;
+            text-align: left;
+        }
+        .logo-container img {
+            height: 40px;
+        }
+        .nav-bar {
+            background-color: #0056b3;
+            padding: 8px 20px;
+        }
+        .breadcrumb {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+        }
+        .breadcrumb-item a {
+            color: white !important;
+        }
+        .page-content {
+            margin-top: 100px;
+            padding: 20px;
+        }
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #0056b3;
+            border: none;
+        }
+        .btn-outline-secondary {
+            border-color: #ddd;
+        }
+        .table {
+            margin-top: 20px;
+        }
+        .table th {
+            background-color: #f8f9fa;
+            border-top: none;
+        }
+        .modal-content {
+            border: none;
+            border-radius: 8px;
+        }
+        .form-control, .form-select {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-field {
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-header">
+        <div class="logo-container">
+            <img src="https://sdo.tusur.ru/theme/image.php/sdo/theme_sdo/1744782980/logotype_small" alt="ТУСУР">
+        </div>
+        <div class="nav-bar">
+            <div class="breadcrumb-nav">
+                <nav aria-label="Панель навигации">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="#">Управление формами</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Формы</h2>
+                    <button class="btn btn-primary" onclick="createForm()">
+                        <i class="bi bi-plus-circle"></i> Создать форму
+                    </button>
+                </div>
+
+                <div class="input-group mb-4">
+                    <input type="text" class="form-control" id="searchInput" placeholder="Поиск форм...">
+                    <button class="btn btn-outline-secondary" type="button" onclick="searchForms()">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Название</th>
+                                <th>Описание</th>
+                                <th>Статус</th>
+                                <th>Дата создания</th>
+                                <th>Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="formsTableBody">
+                            <!-- Данные будут загружены через JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для создания/редактирования формы -->
+    <div class="modal fade" id="formModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formModalTitle">Создать форму</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="formForm">
+                        <div class="mb-3">
+                            <label for="formName" class="form-label">Название</label>
+                            <input type="text" class="form-control" id="formName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formDescription" class="form-label">Описание</label>
+                            <textarea class="form-control" id="formDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Поля формы</label>
+                            <div id="formFields">
+                                <!-- Поля будут добавлены динамически -->
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="addFormField()">
+                                <i class="bi bi-plus-circle"></i> Добавить поле
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" onclick="saveForm()">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    //<![CDATA[
+    async function loadForms() {
+        try {
+            const response = await fetch('/api/forms');
+            const forms = await response.json();
+            const tbody = document.getElementById('formsTableBody');
+            tbody.innerHTML = '';
+
+            forms.forEach(form => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${form.id}</td>
+                    <td>${form.name}</td>
+                    <td>${form.description || '-'}</td>
+                    <td><span class="badge bg-${form.status === 'active' ? 'success' : 'secondary'}">${form.status}</span></td>
+                    <td>${new Date(form.created_at).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="editForm(${form.id})">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteForm(${form.id})">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (error) {
+            console.error('Ошибка загрузки форм:', error);
+            alert('Ошибка загрузки форм');
+        }
+    }
+
+    function createForm() {
+        document.getElementById('formModalTitle').textContent = 'Создать форму';
+        document.getElementById('formForm').reset();
+        document.getElementById('formFields').innerHTML = '';
+        new bootstrap.Modal(document.getElementById('formModal')).show();
+    }
+
+    async function editForm(id) {
+        try {
+            const response = await fetch(`/api/forms/${id}`);
+            const form = await response.json();
+
+            document.getElementById('formModalTitle').textContent = 'Редактировать форму';
+            document.getElementById('formName').value = form.name;
+            document.getElementById('formDescription').value = form.description || '';
+
+            const formFields = document.getElementById('formFields');
+            formFields.innerHTML = '';
+            (form.fields || []).forEach(field => {
+                addFormField(field);
+            });
+
+            new bootstrap.Modal(document.getElementById('formModal')).show();
+        } catch (error) {
+            console.error('Ошибка загрузки формы:', error);
+            alert('Ошибка загрузки формы');
+        }
+    }
+
+    async function saveForm() {
+        const formData = {
+            name: document.getElementById('formName').value,
+            description: document.getElementById('formDescription').value,
+            fields: getFormFields()
+        };
+
+        try {
+            const response = await fetch('/api/forms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                bootstrap.Modal.getInstance(document.getElementById('formModal')).hide();
+                loadForms();
+            } else {
+                const error = await response.json();
+                alert(error.message || 'Ошибка сохранения формы');
+            }
+        } catch (error) {
+            console.error('Ошибка сохранения формы:', error);
+            alert('Ошибка сохранения формы');
+        }
+    }
+
+    async function deleteForm(id) {
+        if (!confirm('Вы уверены, что хотите удалить эту форму?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/forms/${id}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                loadForms();
+            } else {
+                const error = await response.json();
+                alert(error.message || 'Ошибка удаления формы');
+            }
+        } catch (error) {
+            console.error('Ошибка удаления формы:', error);
+            alert('Ошибка удаления формы');
+        }
+    }
+
+    function addFormField(fieldData = null) {
+        const formFields = document.getElementById('formFields');
+        const fieldDiv = document.createElement('div');
+        fieldDiv.className = 'form-field mb-3';
+
+        fieldDiv.innerHTML = `
+            <div class="row g-2">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Название поля"
+                           value="${fieldData ? fieldData.name : ''}" required>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" required>
+                        <option value="text" ${fieldData && fieldData.type === 'text' ? 'selected' : ''}>Текст</option>
+                        <option value="number" ${fieldData && fieldData.type === 'number' ? 'selected' : ''}>Число</option>
+                        <option value="date" ${fieldData && fieldData.type === 'date' ? 'selected' : ''}>Дата</option>
+                        <option value="select" ${fieldData && fieldData.type === 'select' ? 'selected' : ''}>Выбор</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Дополнительные параметры"
+                           value="${fieldData ? (fieldData.options || '') : ''}">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-outline-danger w-100" onclick="this.closest('.form-field').remove()">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+
+        formFields.appendChild(fieldDiv);
+    }
+
+    function getFormFields() {
+        const fields = [];
+        document.querySelectorAll('.form-field').forEach(field => {
+            const inputs = field.querySelectorAll('input, select');
+            const fieldData = {
+                name: inputs[0].value,
+                type: inputs[1].value
+            };
+            if (inputs[2].value) {
+                fieldData.options = inputs[2].value;
+            }
+            fields.push(fieldData);
+        });
+        return fields;
+    }
+
+    function searchForms() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('#formsTableBody tr');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    }
+
+    // Загрузка форм при загрузке страницы
+    document.addEventListener('DOMContentLoaded', loadForms);
+    //]]>
+    </script>
+</body>

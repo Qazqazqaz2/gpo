@@ -1,0 +1,601 @@
+<head>
+    <title>Организации | Заявление на практику</title>
+    <link rel="shortcut icon" href="https://sdo.tusur.ru/theme/image.php/sdo/theme/1744782980/favicon" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="moodle, Организации | Система\Заявление на практику" />
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/theme/yui_combo.php?rollup/3.17.2/yui-moodlesimple-min.css" />
+    <script id="firstthemesheet" type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script>
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/theme/styles.php/sdo/1744782980_1727922378/all" />
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/filter/syntaxhighlighter/styles/atom-one-light.min.css" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #6c757d;
+            --light-gray: #f8f9fa;
+            --border-color: #e9ecef;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-container {
+            padding: 12px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .logo-container img {
+            height: 42px;
+        }
+        
+        .nav-bar {
+            background-color: var(--primary-color);
+            padding: 10px 24px;
+        }
+        
+        .breadcrumb {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            font-size: 14px;
+        }
+        
+        .breadcrumb-item a {
+            color: white !important;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        
+        .breadcrumb-item a:hover {
+            opacity: 0.8;
+        }
+        
+        .page-content {
+            margin-top: 110px;
+            padding: 24px;
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 24px;
+            font-weight: 600;
+        }
+        
+        .card-body {
+            padding: 24px;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            border-radius: 6px;
+            padding: 8px 16px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #004494;
+            transform: translateY(-1px);
+        }
+        
+        .btn-outline-secondary {
+            border-color: var(--border-color);
+            color: var(--secondary-color);
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: var(--light-gray);
+        }
+        
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: rgba(0, 86, 179, 0.1);
+        }
+        
+        .btn-outline-danger {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+        
+        .btn-outline-info {
+            border-color: #17a2b8;
+            color: #17a2b8;
+        }
+        
+        .btn-outline-info:hover {
+            background-color: rgba(23, 162, 184, 0.1);
+        }
+        
+        .input-group {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-control, .form-select, .form-select {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 12px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 86, 179, 0.25);
+        }
+        
+        .table {
+            margin-top: 20px;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .table th {
+            background-color: var(--light-gray);
+            border-top: none;
+            color: var(--secondary-color);
+            font-weight: 600;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .table td {
+            padding: 12px 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .table tr:hover td {
+            background-color: rgba(0, 86, 179, 0.03);
+        }
+        
+        .badge {
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .bg-success {
+            background-color: var(--success-color) !important;
+        }
+        
+        .bg-danger {
+            background-color: var(--danger-color) !important;
+        }
+        
+        .bg-warning {
+            background-color: var(--warning-color) !important;
+            color: #212529 !important;
+        }
+        
+        .bg-secondary {
+            background-color: var(--secondary-color) !important;
+        }
+        
+        .modal-content {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 24px;
+        }
+        
+        .modal-title {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 16px 24px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--secondary-color);
+        }
+        
+        .bi {
+            font-size: 1.1rem;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+        
+        .text-muted {
+            color: #6c757d !important;
+        }
+        
+        @media (max-width: 768px) {
+            .page-content {
+                margin-top: 100px;
+                padding: 16px;
+            }
+            
+            .card-body {
+                padding: 16px;
+            }
+            
+            .table-responsive {
+                border-radius: 8px;
+                border: 1px solid var(--border-color);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="fixed-header">
+        <div class="logo-container">
+            <img src="https://sdo.tusur.ru/theme/image.php/sdo/theme_sdo/1744782980/logotype_small" alt="ТУСУР">
+        </div>
+        <div class="nav-bar">
+            <div class="breadcrumb-nav">
+                <nav aria-label="Панель навигации">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="#">Организации</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="mb-0">Организации</h2>
+                    <button class="btn btn-primary" onclick="createOrganization()">
+                        <i class="bi bi-plus-circle"></i> Добавить организацию
+                    </button>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="input-group mb-3 mb-md-0">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Поиск организаций...">
+                            <button class="btn btn-outline-secondary" type="button" onclick="searchOrganizations()">
+                                <i class="bi bi-search"></i> Поиск
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-select" id="statusFilter" onchange="filterOrganizations()">
+                            <option value="">Все статусы</option>
+                            <option value="active">Активные</option>
+                            <option value="inactive">Неактивные</option>
+                            <option value="pending">На рассмотрении</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="5%">ID</th>
+                                <th width="20%">Название</th>
+                                <th width="25%">Адрес</th>
+                                <th width="15%">Контактное лицо</th>
+                                <th width="10%">Телефон</th>
+                                <th width="10%">Статус</th>
+                                <th width="15%">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="organizationsTableBody">
+                            <!-- Данные будут загружены через JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно для создания/редактирования организации -->
+    <div class="modal fade" id="organizationModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="organizationModalTitle">Добавить организацию</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="organizationForm">
+                        <div class="mb-4">
+                            <label for="orgName" class="form-label">Название организации</label>
+                            <input type="text" class="form-control" id="orgName" required placeholder="Введите название организации">
+                        </div>
+                        <div class="mb-4">
+                            <label for="orgAddress" class="form-label">Адрес</label>
+                            <textarea class="form-control" id="orgAddress" rows="2" required placeholder="Введите адрес организации"></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="orgContact" class="form-label">Контактное лицо</label>
+                            <input type="text" class="form-control" id="orgContact" required placeholder="Введите ФИО контактного лица">
+                        </div>
+                        <div class="mb-4">
+                            <label for="orgPhone" class="form-label">Телефон</label>
+                            <input type="tel" class="form-control" id="orgPhone" required placeholder="Введите контактный телефон">
+                        </div>
+                        <div class="mb-3">
+                            <label for="orgStatus" class="form-label">Статус</label>
+                            <select class="form-select" id="orgStatus" required>
+                                <option value="active">Активная</option>
+                                <option value="inactive">Неактивная</option>
+                                <option value="pending">На рассмотрении</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" onclick="saveOrganization()">
+                        <i class="bi bi-save"></i> Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // Функции для работы с организациями
+    async function loadOrganizations() {
+        try {
+            const response = await fetch('/api/organizations');
+            const organizations = await response.json();
+            const tbody = document.getElementById('organizationsTableBody');
+            tbody.innerHTML = '';
+            
+            organizations.forEach(org => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${org.id}</td>
+                    <td><strong>${org.name}</strong></td>
+                    <td>${org.address}</td>
+                    <td>${org.contact_person}</td>
+                    <td>${org.phone}</td>
+                    <td>
+                        <span class="badge bg-${getStatusBadgeColor(org.status)}">
+                            ${getStatusText(org.status)}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-2" onclick="editOrganization(${org.id})" title="Редактировать">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-info me-2" onclick="viewOrganization(${org.id})" title="Просмотр">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteOrganization(${org.id})" title="Удалить">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch (error) {
+            console.error('Ошибка загрузки организаций:', error);
+            showAlert('Ошибка загрузки организаций', 'danger');
+        }
+    }
+
+    function showAlert(message, type = 'success') {
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        alert.style.top = '20px';
+        alert.style.right = '20px';
+        alert.style.zIndex = '1100';
+        alert.style.maxWidth = '400px';
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(alert);
+        
+        setTimeout(() => {
+            alert.classList.remove('show');
+            setTimeout(() => alert.remove(), 150);
+        }, 3000);
+    }
+
+    function getStatusBadgeColor(status) {
+        switch (status) {
+            case 'active': return 'success';
+            case 'inactive': return 'danger';
+            case 'pending': return 'warning';
+            default: return 'secondary';
+        }
+    }
+
+    function getStatusText(status) {
+        switch (status) {
+            case 'active': return 'Активная';
+            case 'inactive': return 'Неактивная';
+            case 'pending': return 'На рассмотрении';
+            default: return status;
+        }
+    }
+
+    function createOrganization() {
+        document.getElementById('organizationModalTitle').textContent = 'Добавить организацию';
+        document.getElementById('organizationForm').reset();
+        document.getElementById('orgStatus').value = 'active';
+        new bootstrap.Modal(document.getElementById('organizationModal')).show();
+    }
+
+    async function editOrganization(id) {
+        try {
+            const response = await fetch(`/api/organizations/${id}`);
+            const org = await response.json();
+            
+            document.getElementById('organizationModalTitle').textContent = 'Редактировать организацию';
+            document.getElementById('orgName').value = org.name;
+            document.getElementById('orgAddress').value = org.address;
+            document.getElementById('orgContact').value = org.contact_person;
+            document.getElementById('orgPhone').value = org.phone;
+            document.getElementById('orgStatus').value = org.status;
+            
+            new bootstrap.Modal(document.getElementById('organizationModal')).show();
+        } catch (error) {
+            console.error('Ошибка загрузки организации:', error);
+            showAlert('Ошибка загрузки организации', 'danger');
+        }
+    }
+
+    function viewOrganization(id) {
+        // Реализация просмотра организации
+        alert('Просмотр организации с ID: ' + id);
+    }
+
+    async function saveOrganization() {
+        const name = document.getElementById('orgName').value.trim();
+        const address = document.getElementById('orgAddress').value.trim();
+        const contact = document.getElementById('orgContact').value.trim();
+        const phone = document.getElementById('orgPhone').value.trim();
+        
+        if (!name || !address || !contact || !phone) {
+            showAlert('Заполните все обязательные поля', 'warning');
+            return;
+        }
+        
+        const formData = {
+            name: name,
+            address: address,
+            contact_person: contact,
+            phone: phone,
+            status: document.getElementById('orgStatus').value
+        };
+        
+        try {
+            const response = await fetch('/api/organizations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (response.ok) {
+                bootstrap.Modal.getInstance(document.getElementById('organizationModal')).hide();
+                showAlert('Организация успешно сохранена');
+                loadOrganizations();
+            } else {
+                const error = await response.json();
+                showAlert(error.message || 'Ошибка сохранения организации', 'danger');
+            }
+        } catch (error) {
+            console.error('Ошибка сохранения организации:', error);
+            showAlert('Ошибка сохранения организации', 'danger');
+        }
+    }
+
+    async function deleteOrganization(id) {
+        if (!confirm('Вы уверены, что хотите удалить эту организацию? Это действие нельзя отменить.')) {
+            return;
+        }
+        
+        try {
+            const response = await fetch(`/api/organizations/${id}`, {
+                method: 'DELETE'
+            });
+            
+            if (response.ok) {
+                showAlert('Организация успешно удалена');
+                loadOrganizations();
+            } else {
+                const error = await response.json();
+                showAlert(error.message || 'Ошибка удаления организации', 'danger');
+            }
+        } catch (error) {
+            console.error('Ошибка удаления организации:', error);
+            showAlert('Ошибка удаления организации', 'danger');
+        }
+    }
+
+    function searchOrganizations() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const rows = document.querySelectorAll('#organizationsTableBody tr');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    }
+
+    function filterOrganizations() {
+        const status = document.getElementById('statusFilter').value;
+        const rows = document.querySelectorAll('#organizationsTableBody tr');
+        
+        rows.forEach(row => {
+            if (!status) {
+                row.style.display = '';
+            } else {
+                const rowStatus = row.querySelector('.badge').textContent.toLowerCase();
+                row.style.display = rowStatus.includes(status) ? '' : 'none';
+            }
+        });
+    }
+
+    // Загрузка организаций при загрузке страницы
+    document.addEventListener('DOMContentLoaded', loadOrganizations);
+    </script>
+</body>

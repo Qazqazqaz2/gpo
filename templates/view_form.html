@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    {% if 'преподаватель' in current_user.roles %}
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.teacher_dashboard') }}">Панель преподавателя</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.students_by_group', group_id=ask_form.group) }}">Группа {{ ask_form.group_navigation.name }}</a></li>
+                    {% else %}
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.student_dashboard') }}">Мои заявки</a></li>
+                    {% endif %}
+                    <li class="breadcrumb-item active">Заявка №{{ ask_form.id }}</li>
+                </ol>
+            </nav>
+            
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Заявка на практику #{{ ask_form.id }}</h5>
+                    <div>
+                        {% if 'преподаватель' in current_user.roles %}
+                        <a href="{{ url_for('main.students_by_group', group_id=ask_form.group) }}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-arrow-left"></i> Назад к списку
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('main.student_dashboard') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-arrow-left"></i> Назад к моим заявкам
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6 class="border-bottom pb-2 mb-3">Основная информация</h6>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <p class="text-muted mb-1">Вид и тип практики:</p>
+                                    <p class="fw-bold">{{ ask_form.practice_type_navigation.name }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="text-muted mb-1">Группа:</p>
+                                    <p class="fw-bold">{{ ask_form.group_navigation.name }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="text-muted mb-1">Студент:</p>
+                                    <p class="fw-bold">{{ ask_form.student_navigation.surname }} {{ ask_form.student_navigation.name }} {{ ask_form.student_navigation.patronymic }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <p class="text-muted mb-1">Организация:</p>
+                                    <p class="fw-bold">{{ ask_form.contract_navigation.organization_navigation.name }}</p>
+                                    <p class="text-muted small">{{ ask_form.contract_navigation.organization_navigation.address }}</p>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p class="text-muted mb-1">Договор:</p>
+                                    <p class="fw-bold">{{ ask_form.contract_navigation.contract_number }}</p>
+                                    <p class="text-muted small">Действует с {{ ask_form.contract_navigation.date_start.strftime('%d.%m.%Y') }} по {{ ask_form.contract_navigation.date_end.strftime('%d.%m.%Y') }}</p>
+                                </div>
+                            </div>
+                            
+                            <h6 class="border-bottom pb-2 mb-3 mt-4">Руководители</h6>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <p class="text-muted mb-1">Руководитель-консультант:</p>
+                                    <p class="fw-bold">{{ ask_form.consultant_leader_navigation.username }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="text-muted mb-1">Руководитель практики:</p>
+                                    <p class="fw-bold">{{ ask_form.practice_leader_navigation.username }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Статус заявки</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-4">
+                                        {% if ask_form.status_navigation.name == '0' %}
+                                        <div class="display-1 text-danger mb-2">
+                                            <i class="bi bi-x-circle"></i>
+                                        </div>
+                                        <h5>Отклонено</h5>
+                                        <p class="text-muted">Необходимо заполнить заявку заново</p>
+                                        {% elif ask_form.status_navigation.name == '1' %}
+                                        <div class="display-1 text-warning mb-2">
+                                            <i class="bi bi-hourglass-split"></i>
+                                        </div>
+                                        <h5>На рассмотрении</h5>
+                                        <p class="text-muted">Ожидает проверки преподавателем</p>
+                                        {% elif ask_form.status_navigation.name == '2' %}
+                                        <div class="display-1 text-success mb-2">
+                                            <i class="bi bi-check-circle"></i>
+                                        </div>
+                                        <h5>Принято</h5>
+                                        <p class="text-muted">Заявка одобрена</p>
+                                        {% elif ask_form.status_navigation.name == '3' %}
+                                        <div class="display-1 text-info mb-2">
+                                            <i class="bi bi-archive"></i>
+                                        </div>
+                                        <h5>Завершено</h5>
+                                        <p class="text-muted">Практика завершена</p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    {% if 'преподаватель' in current_user.roles %}
+                                    <div class="d-grid gap-2">
+                                        {% if ask_form.status_navigation.name != '2' %}
+                                        <a href="{{ url_for('main.update_form_status', form_id=ask_form.id, status=2) }}" class="btn btn-success">
+                                            <i class="bi bi-check-circle"></i> Принять заявку
+                                        </a>
+                                        {% endif %}
+                                        
+                                        {% if ask_form.status_navigation.name != '0' %}
+                                        <a href="{{ url_for('main.update_form_status', form_id=ask_form.id, status=0) }}" class="btn btn-danger">
+                                            <i class="bi bi-x-circle"></i> Отклонить заявку
+                                        </a>
+                                        {% endif %}
+                                    </div>
+                                    {% else %}
+                                        {% if ask_form.status_navigation.name == '0' %}
+                                        <div class="d-grid">
+                                            <a href="{{ url_for('main.practice_form') }}" class="btn btn-warning">
+                                                <i class="bi bi-pencil"></i> Заполнить заново
+                                            </a>
+                                        </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">Заявка создана: {{ ask_form.id }}</small>
+                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-file-pdf"></i> Скачать PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

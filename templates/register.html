@@ -1,0 +1,171 @@
+<head>
+    <title>Регистрация | Заявление на практику</title>
+    <link rel="shortcut icon" href="https://sdo.tusur.ru/theme/image.php/sdo/theme/1744782980/favicon" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="moodle, Регистрация | Система\Заявление на практику" />
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/theme/yui_combo.php?rollup/3.17.2/yui-moodlesimple-min.css" />
+    <script id="firstthemesheet" type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script>
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/theme/styles.php/sdo/1744782980_1727922378/all" />
+    <link rel="stylesheet" type="text/css" href="https://sdo.tusur.ru/filter/syntaxhighlighter/styles/atom-one-light.min.css" />
+    <meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .logo-container {
+            padding: 10px 20px;
+            text-align: left;
+        }
+        .logo-container img {
+            height: 40px;
+        }
+        .nav-bar {
+            background-color: #0056b3;
+            padding: 8px 20px;
+        }
+        .breadcrumb {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+        }
+        .breadcrumb-item a {
+            color: white !important;
+        }
+        .page-content {
+            margin-top: 100px;
+            display: flex;
+            justify-content: center;
+        }
+        .register-container {
+            width: 400px;
+            min-width: 400px;
+            max-width: 400px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .register-title {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            background-color: #0056b3;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        .activation-notice {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #6c757d;
+        }
+        .role-select {
+            margin-bottom: 15px;
+        }
+        .group-input {
+            display: none;
+        }
+    </style>
+    <script>
+        function toggleGroupField() {
+            var roleSelect = document.getElementById('role');
+            var groupField = document.getElementById('group-field');
+            
+            if (roleSelect.value === 'студент') {
+                groupField.style.display = 'block';
+            } else {
+                groupField.style.display = 'none';
+            }
+        }
+        
+        window.onload = function() {
+            toggleGroupField();
+        }
+    </script>
+</head>
+
+<body>
+    <div class="fixed-header">
+        <div class="logo-container">
+            <img src="https://sdo.tusur.ru/theme/image.php/sdo/theme_sdo/1744782980/logotype_small" alt="ТУСУР">
+        </div>
+        <div class="nav-bar">
+            <div class="breadcrumb-nav">
+                <nav aria-label="Панель навигации">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="#">Регистрация</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="register-container">
+            <h1 class="register-title">Регистрация</h1>
+            
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                
+                <div class="form-group role-select">
+                    <label for="role">Роль</label>
+                    <select class="form-control" id="role" name="role" onchange="toggleGroupField()" required>
+                        <option value="студент">Студент</option>
+                        <option value="преподаватель">Преподаватель</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="group-field">
+                    <label for="group">Номер группы</label>
+                    <input type="text" class="form-control" id="group" name="group" placeholder="Например: 722-1">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+                
+                <button type="submit" class="btn-primary">Зарегистрироваться</button>
+            </form>
+            
+            <div class="login-link">
+                <p>Уже есть аккаунт? <a href="{{ url_for('auth.login') }}">Войти</a></p>
+            </div>
+            
+
+        </div>
+    </div>
+</body>
