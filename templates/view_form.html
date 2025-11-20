@@ -8,7 +8,9 @@
                 <ol class="breadcrumb">
                     {% if 'преподаватель' in current_user.roles %}
                     <li class="breadcrumb-item"><a href="{{ url_for('main.teacher_dashboard') }}">Панель преподавателя</a></li>
-                    <li class="breadcrumb-item"><a href="{{ url_for('main.students_by_group', group_id=ask_form.group) }}">Группа {{ ask_form.group_navigation.name }}</a></li>
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.students_by_group', group_id=ask_form.group.id) }}">Группа {{ ask_form.group.name }}</a></li>
+                    {% elif 'преподаватель консультант' in current_user.roles %}
+                    <li class="breadcrumb-item"><a href="{{ url_for('main.consultant_dashboard', group_id=ask_form.group.id) }}">Панель консультанта</a></li>
                     {% else %}
                     <li class="breadcrumb-item"><a href="{{ url_for('main.student_dashboard') }}">Мои заявки</a></li>
                     {% endif %}
@@ -21,8 +23,12 @@
                     <h5 class="mb-0">Заявка на практику #{{ ask_form.id }}</h5>
                     <div>
                         {% if 'преподаватель' in current_user.roles %}
-                        <a href="{{ url_for('main.students_by_group', group_id=ask_form.group) }}" class="btn btn-outline-primary btn-sm">
+                        <a href="{{ url_for('main.students_by_group', group_id=ask_form.group.id) }}" class="btn btn-outline-primary btn-sm">
                             <i class="bi bi-arrow-left"></i> Назад к списку
+                        </a>
+                        {% elif 'преподаватель консультант' in current_user.roles %}
+                        <a href="{{ url_for('main.consultant_dashboard', group_id=ask_form.group.id) }}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-arrow-left"></i> Назад к панели консультанта
                         </a>
                         {% else %}
                         <a href="{{ url_for('main.student_dashboard') }}" class="btn btn-outline-primary btn-sm">
@@ -40,31 +46,31 @@
                             <div class="row mb-3">
                                 <div class="col-md-4">
                                     <p class="text-muted mb-1">Вид и тип практики:</p>
-                                    <p class="fw-bold">{{ ask_form.practice_type_navigation.name }}</p>
+                                    <p class="fw-bold">{{ ask_form.practice_type.name }}</p>
                                 </div>
                                 <div class="col-md-4">
                                     <p class="text-muted mb-1">Группа:</p>
-                                    <p class="fw-bold">{{ ask_form.group_navigation.name }}</p>
+                                    <p class="fw-bold">{{ ask_form.group.name }}</p>
                                 </div>
                                 <div class="col-md-4">
                                     <p class="text-muted mb-1">Студент:</p>
-                                    <p class="fw-bold">{{ ask_form.student_navigation.surname }} {{ ask_form.student_navigation.name }} {{ ask_form.student_navigation.patronymic }}</p>
+                                    <p class="fw-bold">{{ ask_form.student.surname }} {{ ask_form.student.name }} {{ ask_form.student.patronymic }}</p>
                                 </div>
                             </div>
                             
                             <div class="row mb-3">
                                 <div class="col-md-12">
                                     <p class="text-muted mb-1">Организация:</p>
-                                    <p class="fw-bold">{{ ask_form.contract_navigation.organization_navigation.name }}</p>
-                                    <p class="text-muted small">{{ ask_form.contract_navigation.organization_navigation.address }}</p>
+                                    <p class="fw-bold">{{ ask_form.contract.organization.name }}</p>
+                                    <p class="text-muted small">{{ ask_form.contract.organization.address }}</p>
                                 </div>
                             </div>
                             
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <p class="text-muted mb-1">Договор:</p>
-                                    <p class="fw-bold">{{ ask_form.contract_navigation.contract_number }}</p>
-                                    <p class="text-muted small">Действует с {{ ask_form.contract_navigation.date_start.strftime('%d.%m.%Y') }} по {{ ask_form.contract_navigation.date_end.strftime('%d.%m.%Y') }}</p>
+                                    <p class="fw-bold">{{ ask_form.contract.contract_number }}</p>
+                                    <p class="text-muted small">Действует с {{ ask_form.contract.date_start.strftime('%d.%m.%Y') }} по {{ ask_form.contract.date_end.strftime('%d.%m.%Y') }}</p>
                                 </div>
                             </div>
                             
@@ -73,11 +79,11 @@
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <p class="text-muted mb-1">Руководитель-консультант:</p>
-                                    <p class="fw-bold">{{ ask_form.consultant_leader_navigation.username }}</p>
+                                    <p class="fw-bold">{{ ask_form.consultant_user.username }}</p>
                                 </div>
                                 <div class="col-md-6">
                                     <p class="text-muted mb-1">Руководитель практики:</p>
-                                    <p class="fw-bold">{{ ask_form.practice_leader_navigation.username }}</p>
+                                    <p class="fw-bold">{{ ask_form.practice_leader_user.username }}</p>
                                 </div>
                             </div>
                         </div>
@@ -89,25 +95,25 @@
                                 </div>
                                 <div class="card-body">
                                     <div class="text-center mb-4">
-                                        {% if ask_form.status_navigation.name == '0' %}
+                                        {% if ask_form.status.name == '0' %}
                                         <div class="display-1 text-danger mb-2">
                                             <i class="bi bi-x-circle"></i>
                                         </div>
                                         <h5>Отклонено</h5>
                                         <p class="text-muted">Необходимо заполнить заявку заново</p>
-                                        {% elif ask_form.status_navigation.name == '1' %}
+                                        {% elif ask_form.status.name == '1' %}
                                         <div class="display-1 text-warning mb-2">
                                             <i class="bi bi-hourglass-split"></i>
                                         </div>
                                         <h5>На рассмотрении</h5>
                                         <p class="text-muted">Ожидает проверки преподавателем</p>
-                                        {% elif ask_form.status_navigation.name == '2' %}
+                                        {% elif ask_form.status.name == '2' %}
                                         <div class="display-1 text-success mb-2">
                                             <i class="bi bi-check-circle"></i>
                                         </div>
                                         <h5>Принято</h5>
                                         <p class="text-muted">Заявка одобрена</p>
-                                        {% elif ask_form.status_navigation.name == '3' %}
+                                        {% elif ask_form.status.name == '3' %}
                                         <div class="display-1 text-info mb-2">
                                             <i class="bi bi-archive"></i>
                                         </div>
@@ -116,22 +122,22 @@
                                         {% endif %}
                                     </div>
                                     
-                                    {% if 'преподаватель' in current_user.roles %}
+                                    {% if current_user.is_teacher %}
                                     <div class="d-grid gap-2">
-                                        {% if ask_form.status_navigation.name != '2' %}
+                                        {% if ask_form.status.name != '2' %}
                                         <a href="{{ url_for('main.update_form_status', form_id=ask_form.id, status=2) }}" class="btn btn-success">
                                             <i class="bi bi-check-circle"></i> Принять заявку
                                         </a>
                                         {% endif %}
                                         
-                                        {% if ask_form.status_navigation.name != '0' %}
+                                        {% if ask_form.status.name != '0' %}
                                         <a href="{{ url_for('main.update_form_status', form_id=ask_form.id, status=0) }}" class="btn btn-danger">
                                             <i class="bi bi-x-circle"></i> Отклонить заявку
                                         </a>
                                         {% endif %}
                                     </div>
                                     {% else %}
-                                        {% if ask_form.status_navigation.name == '0' %}
+                                        {% if ask_form.status.name == '0' %}
                                         <div class="d-grid">
                                             <a href="{{ url_for('main.practice_form') }}" class="btn btn-warning">
                                                 <i class="bi bi-pencil"></i> Заполнить заново
@@ -139,6 +145,135 @@
                                         </div>
                                         {% endif %}
                                     {% endif %}
+                                </div>
+                            </div>
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Подписание документов</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <p class="text-muted mb-1">Договор:</p>
+                                        {% if ask_form.consultant_contract_signature %}
+                                        <p class="fw-bold text-success mb-1">{{ ask_form.consultant_contract_signature }}</p>
+                                        {% if ask_form.consultant_contract_signed_at %}
+                                        <p class="text-muted small mb-0">
+                                            {{ ask_form.consultant_contract_signed_at.strftime('%d.%m.%Y %H:%M') }}
+                                        </p>
+                                        {% endif %}
+                                        {% else %}
+                                        <p class="text-muted mb-1">Ожидает подписи преподавателя-консультанта</p>
+                                        {% if current_user.is_consultant and ask_form.consultant_leader_id == current_user.id %}
+                                        <form action="{{ url_for('main.consultant_sign', form_id=ask_form.id, document='contract') }}" method="post">
+                                            <button type="submit" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-pen"></i> Подписать договор
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <p class="text-muted mb-1">Заявление:</p>
+                                        {% if ask_form.consultant_application_signature %}
+                                        <p class="fw-bold text-success mb-1">{{ ask_form.consultant_application_signature }}</p>
+                                        {% if ask_form.consultant_application_signed_at %}
+                                        <p class="text-muted small mb-0">
+                                            {{ ask_form.consultant_application_signed_at.strftime('%d.%m.%Y %H:%M') }}
+                                        </p>
+                                        {% endif %}
+                                        {% else %}
+                                        <p class="text-muted mb-1">Ожидает подписи преподавателя-консультанта</p>
+                                        {% if current_user.is_consultant and ask_form.consultant_leader_id == current_user.id %}
+                                        <form action="{{ url_for('main.consultant_sign', form_id=ask_form.id, document='application') }}" method="post">
+                                            <button type="submit" class="btn btn-outline-primary btn-sm">
+                                                <i class="bi bi-file-earmark-text"></i> Подписать заявление
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <hr>
+                                    <div>
+                                        <p class="text-muted mb-2">Дневник практики:</p>
+                                        {% if diary %}
+                                            <div class="mb-2">
+                                                <span class="text-muted small d-block">Студент:</span>
+                                                {% if diary.student_signature %}
+                                                <span class="fw-bold text-success">{{ diary.student_signature }}</span>
+                                                {% if diary.student_signed_at %}
+                                                <span class="text-muted small">{{ diary.student_signed_at.strftime('%d.%m.%Y %H:%M') }}</span>
+                                                {% endif %}
+                                                {% else %}
+                                                <span class="text-muted">Ожидает подписи студента</span>
+                                                {% if current_user.is_student and ask_form.responsible_user_id == current_user.id %}
+                                                <form action="{{ url_for('main.practice_diary_sign', ask_form_id=ask_form.id, role='student') }}" method="post" class="mt-2">
+                                                    <button type="submit" class="btn btn-outline-primary btn-sm">
+                                                        <i class="bi bi-pen"></i> Подписать дневник
+                                                    </button>
+                                                </form>
+                                                {% endif %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="mb-2">
+                                                <span class="text-muted small d-block">Преподаватель-консультант:</span>
+                                                {% if diary.consultant_signature %}
+                                                <span class="fw-bold text-success">{{ diary.consultant_signature }}</span>
+                                                {% if diary.consultant_signed_at %}
+                                                <span class="text-muted small">{{ diary.consultant_signed_at.strftime('%d.%m.%Y %H:%M') }}</span>
+                                                {% endif %}
+                                                {% else %}
+                                                <span class="text-muted">Ожидает подписи консультанта</span>
+                                                {% if current_user.is_consultant and ask_form.consultant_leader_id == current_user.id %}
+                                                <form action="{{ url_for('main.practice_diary_sign', ask_form_id=ask_form.id, role='consultant') }}" method="post" class="mt-2">
+                                                    <button type="submit" class="btn btn-outline-primary btn-sm" {% if not diary.student_signature %}disabled{% endif %}>
+                                                        <i class="bi bi-pen"></i> Подписать дневник
+                                                    </button>
+                                                </form>
+                                                {% endif %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="mb-2">
+                                                <span class="text-muted small d-block">Руководитель практики:</span>
+                                                {% if diary.practice_leader_signature %}
+                                                <span class="fw-bold text-success">{{ diary.practice_leader_signature }}</span>
+                                                {% if diary.practice_leader_signed_at %}
+                                                <span class="text-muted small">{{ diary.practice_leader_signed_at.strftime('%d.%m.%Y %H:%M') }}</span>
+                                                {% endif %}
+                                                {% else %}
+                                                <span class="text-muted">Ожидает подписи руководителя практики</span>
+                                                {% if current_user.is_teacher and ask_form.practice_leader_id == current_user.id %}
+                                                <form action="{{ url_for('main.practice_diary_sign', ask_form_id=ask_form.id, role='practice_leader') }}" method="post" class="mt-2">
+                                                    <button type="submit" class="btn btn-outline-primary btn-sm" {% if not diary.consultant_signature %}disabled{% endif %}>
+                                                        <i class="bi bi-pen"></i> Подписать дневник
+                                                    </button>
+                                                </form>
+                                                {% endif %}
+                                                {% endif %}
+                                            </div>
+                                            <div class="d-grid mt-3">
+                                                <a href="{{ url_for('main.practice_diary', ask_form_id=ask_form.id) }}" class="btn btn-outline-secondary btn-sm">
+                                                    <i class="bi bi-journal-text"></i> Открыть дневник
+                                                </a>
+                                                <div class="btn-group mt-2" role="group">
+                                                    <a href="{{ url_for('main.practice_diary_download', ask_form_id=ask_form.id, file_format='pdf') }}" class="btn btn-outline-success btn-sm">
+                                                        <i class="bi bi-file-earmark-pdf"></i> PDF
+                                                    </a>
+                                                    <a href="{{ url_for('main.practice_diary_download', ask_form_id=ask_form.id, file_format='docx') }}" class="btn btn-outline-secondary btn-sm">
+                                                        <i class="bi bi-file-earmark-word"></i> DOCX
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <p class="text-muted mb-3">Дневник ещё не заполнен студентом.</p>
+                                            {% if current_user.is_student and ask_form.responsible_user_id == current_user.id %}
+                                            <div class="d-grid">
+                                                <a href="{{ url_for('main.practice_diary', ask_form_id=ask_form.id) }}" class="btn btn-outline-secondary btn-sm">
+                                                    <i class="bi bi-journal-text"></i> Заполнить дневник
+                                                </a>
+                                            </div>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>

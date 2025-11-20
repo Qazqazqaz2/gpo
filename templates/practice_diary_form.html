@@ -1,0 +1,250 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col">
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Дневник практики по заявке №{{ ask_form.id }}</h5>
+                    <div class="d-flex gap-2">
+                        {% if diary %}
+                        <div class="btn-group" role="group">
+                            <a href="{{ url_for('main.practice_diary_download', ask_form_id=ask_form.id, file_format='pdf') }}" class="btn btn-outline-success btn-sm">
+                                <i class="bi bi-file-earmark-pdf"></i> PDF
+                            </a>
+                            <a href="{{ url_for('main.practice_diary_download', ask_form_id=ask_form.id, file_format='docx') }}" class="btn btn-outline-secondary btn-sm">
+                                <i class="bi bi-file-earmark-word"></i> DOCX
+                            </a>
+                        </div>
+                        {% endif %}
+                        <a href="{{ url_for('main.view_form', form_id=ask_form.id) }}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-arrow-left"></i> Назад к заявке
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="text-muted mb-1">Студент</p>
+                            <p class="fw-bold">
+                                {{ ask_form.student.surname }} {{ ask_form.student.name }} {{ ask_form.student.patronymic }}
+                            </p>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="text-muted mb-1">Группа</p>
+                            <p class="fw-bold">{{ ask_form.group.name }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p class="text-muted mb-1">Тип практики</p>
+                            <p class="fw-bold">{{ ask_form.practice_type.name }}</p>
+                        </div>
+                    </div>
+                    <div class="alert alert-info mb-0">
+                        {% if can_edit %}
+                        <i class="bi bi-info-circle"></i> Заполните разделы дневника и сохраните изменения. После сохранения вы сможете подписать дневник.
+                        {% else %}
+                        <i class="bi bi-info-circle"></i> Просмотр дневника доступен только для чтения. Студент может вносить изменения и подписывать дневник.
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            {% if diary %}
+            <form method="post">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">1. Общие сведения</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Факультет</label>
+                                <input type="text" name="faculty" class="form-control" value="{{ diary.faculty or '' }}" {% if not can_edit %}readonly{% endif %}>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Курс</label>
+                                <input type="text" name="course" class="form-control" value="{{ diary.course or '' }}" {% if not can_edit %}readonly{% endif %}>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">Группа</label>
+                                <input type="text" name="group_name" class="form-control" value="{{ diary.group_name or ask_form.group.name }}" {% if not can_edit %}readonly{% endif %}>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Место практики</label>
+                                <input type="text" name="practice_place" class="form-control" value="{{ diary.practice_place or '' }}" {% if not can_edit %}readonly{% endif %}>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Срок практики</label>
+                                <input type="text" name="practice_period" class="form-control" value="{{ diary.practice_period or '' }}" {% if not can_edit %}readonly{% endif %}>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Рабочий график (план) проведения практики</label>
+                                <textarea name="work_plan" rows="4" class="form-control" {% if not can_edit %}readonly{% endif %}>{{ diary.work_plan or '' }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">2. Индивидуальное задание</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Тема практики</label>
+                            <textarea name="assignment_theme" rows="3" class="form-control" {% if not can_edit %}readonly{% endif %}>{{ diary.assignment_theme or '' }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Цель практики</label>
+                            <textarea name="assignment_goal" rows="3" class="form-control" {% if not can_edit %}readonly{% endif %}>{{ diary.assignment_goal or '' }}</textarea>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label">Задачи практики</label>
+                            <textarea name="assignment_tasks" rows="6" class="form-control" {% if not can_edit %}readonly{% endif %}>{{ diary.assignment_tasks or '' }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">3. Содержание работ практики</h6>
+                    </div>
+                    <div class="card-body">
+                        <label class="form-label">Ежедневные записи</label>
+                        <textarea name="daily_entries" rows="12" class="form-control" placeholder="Дата, подразделение, содержание работы, подпись руководителя" {% if not can_edit %}readonly{% endif %}>{{ diary.daily_entries or '' }}</textarea>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">4. Отметки о прохождении инструктажа</h6>
+                    </div>
+                    <div class="card-body">
+                        <label class="form-label">Инструктажи</label>
+                        <textarea name="instruction_notes" rows="6" class="form-control" placeholder="Охрана труда, техника безопасности, пожарная безопасность, внутренний распорядок" {% if not can_edit %}readonly{% endif %}>{{ diary.instruction_notes or '' }}</textarea>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">5. Оценка работы обучающегося</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Заключение о работе обучающегося</label>
+                            <textarea name="evaluation_note" rows="6" class="form-control" {% if not can_edit %}readonly{% endif %}>{{ diary.evaluation_note or '' }}</textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Поощрения и взыскания</label>
+                            <textarea name="evaluation_rewards" rows="4" class="form-control" {% if not can_edit %}readonly{% endif %}>{{ diary.evaluation_rewards or '' }}</textarea>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label">Оценка за практику (организация)</label>
+                            <input type="text" name="evaluation_grade" class="form-control" value="{{ diary.evaluation_grade or '' }}" {% if not can_edit %}readonly{% endif %}>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h6 class="mb-0">6. Заключение руководителя практики от Университета</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">Заключение</label>
+                            <textarea name="university_conclusion" rows="6" class="form-control" {% if not can_edit %}readonly{% endif %}>{{ diary.university_conclusion or '' }}</textarea>
+                        </div>
+                        <div class="mb-0">
+                            <label class="form-label">Оценка за практику (университет)</label>
+                            <input type="text" name="university_grade" class="form-control" value="{{ diary.university_grade or '' }}" {% if not can_edit %}readonly{% endif %}>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if can_edit %}
+                <div class="d-flex justify-content-end mb-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Сохранить изменения
+                    </button>
+                </div>
+                {% endif %}
+            </form>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="mb-0">Подписи</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row gy-4">
+                        <div class="col-md-4">
+                            <h6 class="text-muted">Студент</h6>
+                            {% if diary.student_signature %}
+                            <p class="text-success fw-bold mb-1">{{ diary.student_signature }}</p>
+                            {% if diary.student_signed_at %}
+                            <p class="text-muted small mb-0">{{ diary.student_signed_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                            {% endif %}
+                            {% else %}
+                            <p class="text-muted">Ожидает подписи студента</p>
+                            {% if can_edit %}
+                            <form action="{{ url_for('main.practice_diary_sign', ask_form_id=ask_form.id, role='student') }}" method="post">
+                                <button type="submit" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pen"></i> Подписать дневник
+                                </button>
+                            </form>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="text-muted">Преподаватель-консультант</h6>
+                            {% if diary.consultant_signature %}
+                            <p class="text-success fw-bold mb-1">{{ diary.consultant_signature }}</p>
+                            {% if diary.consultant_signed_at %}
+                            <p class="text-muted small mb-0">{{ diary.consultant_signed_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                            {% endif %}
+                            {% else %}
+                            <p class="text-muted">Ожидает подписи консультанта</p>
+                            {% if is_consultant and diary.student_signature %}
+                            <form action="{{ url_for('main.practice_diary_sign', ask_form_id=ask_form.id, role='consultant') }}" method="post">
+                                <button type="submit" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pen"></i> Подписать дневник
+                                </button>
+                            </form>
+                            {% elif is_consultant %}
+                            <small class="text-muted">Студент должен подписать дневник до вашей подписи.</small>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <h6 class="text-muted">Руководитель практики</h6>
+                            {% if diary.practice_leader_signature %}
+                            <p class="text-success fw-bold mb-1">{{ diary.practice_leader_signature }}</p>
+                            {% if diary.practice_leader_signed_at %}
+                            <p class="text-muted small mb-0">{{ diary.practice_leader_signed_at.strftime('%d.%m.%Y %H:%M') }}</p>
+                            {% endif %}
+                            {% else %}
+                            <p class="text-muted">Ожидает подписи руководителя практики</p>
+                            {% if is_practice_leader and diary.consultant_signature %}
+                            <form action="{{ url_for('main.practice_diary_sign', ask_form_id=ask_form.id, role='practice_leader') }}" method="post">
+                                <button type="submit" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pen"></i> Подписать дневник
+                                </button>
+                            </form>
+                            {% elif is_practice_leader %}
+                            <small class="text-muted">Подпишите дневник после консультанта.</small>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i> Дневник ещё не создан. Студент сможет создать и заполнить дневник после подачи заявки.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

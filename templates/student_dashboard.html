@@ -7,9 +7,14 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Заявки на практику</h5>
-                    <a href="{{ url_for('main.practice_form') }}" class="btn btn-primary btn-sm">
-                        <i class="bi bi-plus-lg"></i> Новая заявка
-                    </a>
+                            <div class="d-flex gap-2">
+                                <a href="{{ url_for('main.student_diaries') }}" class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-journal-text"></i> Мои дневники
+                                </a>
+                                <a href="{{ url_for('main.practice_form') }}" class="btn btn-primary btn-sm">
+                                    <i class="bi bi-plus-lg"></i> Новая заявка
+                                </a>
+                            </div>
                 </div>
                 <div class="card-body">
                     {% if ask_forms %}
@@ -21,6 +26,7 @@
                                     <th>Тип практики</th>
                                     <th>Группа</th>
                                     <th>Статус</th>
+                                    <th>Дневник</th>
                                     <th>Действия</th>
                                 </tr>
                             </thead>
@@ -28,24 +34,38 @@
                                 {% for form in ask_forms %}
                                 <tr>
                                     <td>{{ form.id }}</td>
-                                    <td>{{ form.practice_type_navigation.name }}</td>
-                                    <td>{{ form.group_navigation.name }}</td>
+                                    <td>{{ form.practice_type.name }}</td>
+                                    <td>{{ form.group.name }}</td>
                                     <td>
-                                        {% if form.status_navigation.name == '0' %}
+                                        {% if form.status.name == '0' %}
                                         <span class="badge bg-danger">Отклонено</span>
-                                        {% elif form.status_navigation.name == '1' %}
+                                        {% elif form.status.name == '1' %}
                                         <span class="badge bg-warning">На рассмотрении</span>
-                                        {% elif form.status_navigation.name == '2' %}
+                                        {% elif form.status.name == '2' %}
                                         <span class="badge bg-success">Принято</span>
-                                        {% elif form.status_navigation.name == '3' %}
+                                        {% elif form.status.name == '3' %}
                                         <span class="badge bg-info">Завершено</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if form.diary %}
+                                            {% if form.diary.student_signature %}
+                                            <span class="badge bg-success">Подписан</span>
+                                            {% else %}
+                                            <span class="badge bg-warning text-dark">Требует подписи</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="badge bg-secondary">Не заполнен</span>
                                         {% endif %}
                                     </td>
                                     <td>
                                         <a href="{{ url_for('main.view_form', form_id=form.id) }}" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-eye"></i> Просмотр
                                         </a>
-                                        {% if form.status_navigation.name == '0' %}
+                                        <a href="{{ url_for('main.practice_diary', ask_form_id=form.id) }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-journal-text"></i> Дневник
+                                        </a>
+                                        {% if form.status.name == '0' %}
                                         <a href="{{ url_for('main.practice_form') }}" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil"></i> Заполнить заново
                                         </a>

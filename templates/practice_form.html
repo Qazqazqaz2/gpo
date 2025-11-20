@@ -118,18 +118,35 @@
                             <div class="col-md-6 mb-3">
                                 <label for="consultant_leader" class="form-label">Руководитель консультант</label>
                                 <select name="consultant_leader" id="consultant_leader" class="form-select" required>
-                                    {% for teacher in teachers %}
-                                    <option value="{{ teacher.id }}">{{ teacher.username }}</option>
-                                    {% endfor %}
+                                    {% if consultants %}
+                                        {% for consultant in consultants %}
+                                        <option value="{{ consultant.id }}" {% if assigned_consultant_id and consultant.id == assigned_consultant_id %}selected{% endif %}>
+                                            {{ consultant.username }}
+                                        </option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option value="" selected disabled>Нет доступных консультантов</option>
+                                    {% endif %}
                                 </select>
+                                {% if assigned_consultant_id %}
+                                <small class="text-muted">За вашей группой закреплён консультант: 
+                                    {% for consultant in consultants %}
+                                        {% if consultant.id == assigned_consultant_id %}{{ consultant.username }}{% endif %}
+                                    {% endfor %}
+                                </small>
+                                {% endif %}
                             </div>
                             
                             <div class="col-md-6 mb-3">
                                 <label for="practice_leader" class="form-label">Руководитель практики</label>
                                 <select name="practice_leader" id="practice_leader" class="form-select" required>
-                                    {% for teacher in teachers %}
-                                    <option value="{{ teacher.id }}">{{ teacher.username }}</option>
-                                    {% endfor %}
+                                    {% if practice_leaders %}
+                                        {% for teacher in practice_leaders %}
+                                        <option value="{{ teacher.id }}">{{ teacher.username }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option value="" selected disabled>Нет доступных руководителей практики</option>
+                                    {% endif %}
                                 </select>
                             </div>
                         </div>

@@ -226,6 +226,20 @@
                         </a>
                     </li>
                     {% endif %}
+                    {% if current_user.is_authenticated and current_user.roles is defined and 'преподаватель консультант' in current_user.roles %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.consultant_dashboard') }}">
+                            <i class="bi bi-people"></i> Панель консультанта
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.roles is defined and 'студент' in current_user.roles %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('main.student_diaries') }}">
+                            <i class="bi bi-journal-text"></i> Мои дневники
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
                 <ul class="navbar-nav">
                     {% if current_user.is_authenticated %}

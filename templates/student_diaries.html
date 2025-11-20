@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Мои дневники практики</h5>
+                    <a href="{{ url_for('main.student_dashboard') }}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-arrow-left"></i> К заявкам
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if ask_forms %}
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> Откройте дневник, чтобы заполнить разделы и поставить подпись. После подписи студента дневник смогут подтвердить преподаватель-консультант и руководитель практики.
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>ID заявки</th>
+                                    <th>Практика</th>
+                                    <th>Группа</th>
+                                    <th>Статус дневника</th>
+                                    <th>Подписи</th>
+                                    <th class="text-end">Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for form in ask_forms %}
+                                {% set diary = form.diary %}
+                                <tr>
+                                    <td>#{{ form.id }}</td>
+                                    <td>{{ form.practice_type.name }}</td>
+                                    <td>{{ form.group.name }}</td>
+                                    <td>
+                                        {% if diary %}
+                                            {% if diary.student_signature %}
+                                            <span class="badge bg-success">Подписан студентом</span>
+                                            {% else %}
+                                            <span class="badge bg-warning text-dark">Ожидает заполнения</span>
+                                            {% endif %}
+                                        {% else %}
+                                            <span class="badge bg-secondary">Не создан</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if diary %}
+                                            <div class="d-flex flex-column gap-1">
+                                                <small>
+                                                    Студент:
+                                                    {% if diary.student_signature %}
+                                                        <span class="text-success">{{ diary.student_signature }}</span>
+                                                    {% else %}
+                                                        <span class="text-muted">нет</span>
+                                                    {% endif %}
+                                                </small>
+                                                <small>
+                                                    Консультант:
+                                                    {% if diary.consultant_signature %}
+                                                        <span class="text-success">{{ diary.consultant_signature }}</span>
+                                                    {% else %}
+                                                        <span class="text-muted">нет</span>
+                                                    {% endif %}
+                                                </small>
+                                                <small>
+                                                    Руководитель:
+                                                    {% if diary.practice_leader_signature %}
+                                                        <span class="text-success">{{ diary.practice_leader_signature }}</span>
+                                                    {% else %}
+                                                        <span class="text-muted">нет</span>
+                                                    {% endif %}
+                                                </small>
+                                            </div>
+                                        {% else %}
+                                            <span class="text-muted">—</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ url_for('main.practice_diary', ask_form_id=form.id) }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="bi bi-journal-text"></i> Открыть дневник
+                                        </a>
+                                        <a href="{{ url_for('main.practice_diary_download', ask_form_id=form.id, file_format='pdf') }}" class="btn btn-sm btn-outline-success ms-2">
+                                            <i class="bi bi-file-earmark-pdf"></i> PDF
+                                        </a>
+                                        <a href="{{ url_for('main.practice_diary_download', ask_form_id=form.id, file_format='docx') }}" class="btn btn-sm btn-outline-secondary ms-2">
+                                            <i class="bi bi-file-earmark-word"></i> DOCX
+                                        </a>
+                                        {% if diary and not diary.student_signature %}
+                                        <form action="{{ url_for('main.practice_diary_sign', ask_form_id=form.id, role='student') }}" method="post" class="d-inline-block ms-2">
+                                            <button type="submit" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-pen"></i> Подписать
+                                            </button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info mb-0">
+                        <i class="bi bi-info-circle"></i> У вас пока нет заявок на практику. После подачи заявки здесь появится доступ к дневнику.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

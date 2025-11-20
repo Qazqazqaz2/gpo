@@ -1,28 +1,33 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 import os
+from dotenv import load_dotenv
 from extensions import db, migrate, login_manager
 from models import User, Role
 from ddos_protection import protect_flask_app, rate_limit, geo_filter
 
+# Load environment variables from .env if present
+load_dotenv()
+
 # Create Flask app
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
-app.config['SECRET_KEY'] = 'dev_key_change_in_production'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:762341@localhost/gpo_practice'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Core config from environment
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev_key_change_in_production')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'postgresql://postgres:762341@localhost/gpo_practice')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS', 'False').lower() == 'true'
 
 # Initialize extensions
 db.init_app(app)
 migrate.init_app(app, db)
 login_manager.init_app(app)
 
-# Configure DDoS protection with custom settings
+# Configure DDoS protection with env-driven settings
 ddos_config = {
-    "RATE_LIMIT": 150,                # Allow 150 requests per minute per IP
-    "MAX_CONNECTIONS_PER_IP": 25,     # Allow 25 concurrent connections per IP
-    "BLACKLIST_THRESHOLD": 3,         # Blacklist after 3 violations
-    "ANOMALY_DETECTION_ENABLED": True,
-    "WHITELISTED_IPS": set(['127.0.0.1', '::1']),  # Whitelist localhost
+    "RATE_LIMIT": int(os.getenv('DDOS_RATE_LIMIT', '150')),
+    "MAX_CONNECTIONS_PER_IP": int(os.getenv('DDOS_MAX_CONNECTIONS_PER_IP', '25')),
+    "BLACKLIST_THRESHOLD": int(os.getenv('DDOS_BLACKLIST_THRESHOLD', '3')),
+    "ANOMALY_DETECTION_ENABLED": os.getenv('DDOS_ANOMALY_DETECTION_ENABLED', 'True').lower() == 'true',
+    "WHITELISTED_IPS": set(ip.strip() for ip in os.getenv('DDOS_WHITELISTED_IPS', '127.0.0.1,::1').split(',')),
 }
 
 # Apply DDoS protection to the app
@@ -96,7 +101,4 @@ def api_data():
     return {"status": "success", "message": "API access allowed"}
 
 if __name__ == '__main__':
-    # In production, use a proper WSGI server with these settings:
-    # For gunicorn: gunicorn -w 4 -b 0.0.0.0:5000 --backlog 1024 app:app
-    # For uWSGI: uwsgi --socket 0.0.0.0:5000 --protocol=http --processes 4 --threads 2 --listen 1024 --module app:app
-    app.run(debug=False) 
+    app.run(debug=False)
